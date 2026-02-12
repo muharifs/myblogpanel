@@ -6,7 +6,7 @@ export default function ProtectedRoute({
 }: {
   children: JSX.Element;
 }) {
-  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+  const isLoggedIn = localStorage.getItem("access_token");
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }

@@ -14,31 +14,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { login } from "@/features/auth/auth";
 
-export default function LoginForm({
+export default function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  async function handleLogin(event: React.FormEvent) {
-    event.preventDefault();
-    // Handle login logic here
-    try {
-      const data = await login(username, password);
-
-      localStorage.setItem("access_token", data.access_token);
-
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Login gagal: " + error);
-    }
-  }
   return (
     <div
       className={cn(
@@ -50,46 +30,52 @@ export default function LoginForm({
       <div className="flex flex-col gap-6 w-full max-w-sm px-4">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-xl">Selamat Datang</CardTitle>
+            <CardTitle className="text-xl">Daftar Akun Anda</CardTitle>
             <CardDescription>
-              Login dengan akun Anda untuk melanjutkan
+              Buat akun baru untuk memulai perjalanan Anda bersama kami
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin}>
+            <form>
               <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                  />
+                </Field>
                 <Field>
                   <FieldLabel htmlFor="username">Username</FieldLabel>
                   <Input
                     id="username"
                     type="text"
+                    placeholder="johndoe"
                     required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </Field>
                 <Field>
-                  <div className="flex items-center">
+                  <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                  </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                    <Input id="password" type="password" required />
+                  </Field>
+                  <FieldDescription>
+                    Must be at least 8 characters long.
+                  </FieldDescription>
                 </Field>
                 <Field>
-                  <Button type="submit">Login</Button>
+                  <Button type="submit">Buat Akun</Button>
                   <FieldDescription className="text-center">
-                    Don&apos;t have an account? <a href="/register">Sign up</a>
+                    Sudah mempunyai akun ?<a href="/login">Masuk</a>
                   </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
           </CardContent>
         </Card>
+
         <FieldDescription className="px-6 text-center">
           By clicking continue, you agree to our{" "}
           <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.

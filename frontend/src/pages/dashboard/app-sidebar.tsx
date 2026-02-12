@@ -35,7 +35,7 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "My Blog Panel",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
@@ -52,21 +52,21 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Management Dashboard",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Users",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Categories",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Posts",
           url: "#",
         },
       ],

@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Login from "@/pages/login/login-form";
+import Register from "@/pages/register/signup-form";
 import Dashboard from "@/pages/dashboard/app-sidebar";
 import Test from "@/pages/login/test";
 import ProtectedRoute from "./ProtectedRoute";
@@ -12,6 +13,7 @@ export default function AppRoutes() {
         <Routes>
           <Route path="/" element={<Test />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard"
             element={
