@@ -14,11 +14,42 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "@/lib/axios";
 
 export default function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await api.post("/users", {
+        name,
+        username,
+        password,
+      });
+
+      alert("Akun berhasil dibuat");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      alert("Gagal membuat akun");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -35,51 +66,54 @@ export default function SignupForm({
               Buat akun baru untuk memulai perjalanan Anda bersama kami
             </CardDescription>
           </CardHeader>
+
           <CardContent>
-            <form>
+            <form onSubmit={handleSubmit}>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                  <FieldLabel>Nama Lengkap</FieldLabel>
                   <Input
-                    id="name"
-                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="John Doe"
                     required
                   />
                 </Field>
+
                 <Field>
-                  <FieldLabel htmlFor="username">Username</FieldLabel>
+                  <FieldLabel>Username</FieldLabel>
                   <Input
-                    id="username"
-                    type="text"
-                    placeholder="johndoe"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="ex: johndoe"
                     required
                   />
                 </Field>
+
                 <Field>
-                  <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
-                  </Field>
-                  <FieldDescription>
-                    Must be at least 8 characters long.
-                  </FieldDescription>
+                  <FieldLabel>Password</FieldLabel>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Masukan Password"
+                    required
+                  />
                 </Field>
+
                 <Field>
-                  <Button type="submit">Buat Akun</Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? "Membuat..." : "Buat Akun"}
+                  </Button>
+
                   <FieldDescription className="text-center">
-                    Sudah mempunyai akun ?<a href="/login">Masuk</a>
+                    Sudah mempunyai akun? <a href="/login">Masuk</a>
                   </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
           </CardContent>
         </Card>
-
-        <FieldDescription className="px-6 text-center">
-          By clicking continue, you agree to our{" "}
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-        </FieldDescription>
       </div>
     </div>
   );

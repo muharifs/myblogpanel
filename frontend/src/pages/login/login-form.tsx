@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { login } from "@/features/auth/auth";
+import { useAuth } from "@/features/auth/useAuth";
 
 export default function LoginForm({
   className,
@@ -25,6 +26,7 @@ export default function LoginForm({
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { loadUser } = useAuth();
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
@@ -33,7 +35,7 @@ export default function LoginForm({
       const data = await login(username, password);
 
       localStorage.setItem("access_token", data.access_token);
-
+      await loadUser();
       navigate("/dashboard");
     } catch (error) {
       alert("Login gagal: " + error);
@@ -83,17 +85,13 @@ export default function LoginForm({
                 <Field>
                   <Button type="submit">Login</Button>
                   <FieldDescription className="text-center">
-                    Don&apos;t have an account? <a href="/register">Sign up</a>
+                    Belum&apos;punya akun <a href="/register">Daftar Akun</a>
                   </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
           </CardContent>
         </Card>
-        <FieldDescription className="px-6 text-center">
-          By clicking continue, you agree to our{" "}
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-        </FieldDescription>
       </div>
     </div>
   );

@@ -14,7 +14,12 @@ export class PostsService {
     return text.toLowerCase().replace(/\s+/g, '-');
   }
 
-  async create(title: string, content: string, categoryId: number) {
+  async create(
+    title: string,
+    content: string,
+    categoryId: number,
+    authorId: number,
+  ) {
     const slug = this.slugify(title);
 
     const post = this.repo.create({
@@ -22,6 +27,7 @@ export class PostsService {
       content,
       slug,
       categoryId,
+      authorId,
     });
 
     return this.repo.save(post);
@@ -29,14 +35,14 @@ export class PostsService {
 
   findAll() {
     return this.repo.find({
-      relations: ['category'],
+      relations: ['category', 'author'],
     });
   }
 
   async findOne(id: number) {
     const post = await this.repo.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'author'],
     });
 
     if (!post) throw new NotFoundException('Post not found');
@@ -44,7 +50,13 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, title: string, content: string, categoryId: number) {
+  async update(
+    id: number,
+    title: string,
+    content: string,
+    categoryId: number,
+    authorId: number,
+  ) {
     const slug = this.slugify(title);
 
     await this.repo.update(id, {
@@ -52,6 +64,7 @@ export class PostsService {
       content,
       slug,
       categoryId,
+      authorId,
     });
 
     return this.findOne(id);
@@ -63,5 +76,15 @@ export class PostsService {
     if (!result.affected) throw new NotFoundException('Post not found');
 
     return { message: 'Post deleted' };
+  }
+
+  findByAuthor(authorId: number) {
+    return this.repo.find({
+      where: {
+        author: { id: authorId },
+      },
+      relations: ['author', 'category'],
+      order: { id: 'DESC' },
+    });
   }
 }
